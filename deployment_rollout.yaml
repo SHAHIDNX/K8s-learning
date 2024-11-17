@@ -1,23 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-sleep
+  name: readiness-exec
   labels:
-    app: nginx-sleep
+    app: readiness-exec
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx-sleep
+      app: readiness-exec
   template:
     metadata:
       labels:
-        app: nginx-sleep
+        app: readiness-exec
     spec:
       containers:
-      - name: nginx
-        image: nginx:latest
-        command: ["/bin/sh", "-c"]
-        args: ["sleep 20 && nginx -g 'daemon off;'"]
-        ports:
-        - containerPort: 80
+      - name: readiness
+        image: registry.k8s.io/busybox:latest
+        args:
+        - /bin/sh
+        - -c
+        - sleep 15; touch /tmp/healthy; sleep 600
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
