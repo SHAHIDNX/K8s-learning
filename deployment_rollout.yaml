@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-sleep
+  labels:
+    app: nginx-sleep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-sleep
+  template:
+    metadata:
+      labels:
+        app: nginx-sleep
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        command: ["/bin/sh", "-c"]
+        args: ["sleep 20 && nginx -g 'daemon off;'"]
+        ports:
+        - containerPort: 80
