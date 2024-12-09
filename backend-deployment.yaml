@@ -20,4 +20,4 @@ spec:
         args:
         - "-text=Hello from the backend!"
         ports:
-        - containerPort: 8080
+        - containerPort: 5678
